@@ -319,9 +319,30 @@ $.widget( "ui.dialog", {
 				if ( event.keyCode !== $.ui.keyCode.TAB ) {
 					return;
 				}
-				var tabbables = this.uiDialog.find(":tabbable"),
-					first = tabbables.filter(":first"),
-					last  = tabbables.filter(":last");
+				
+				// The :tabbable selector can be slow and add a noticable lag to the UI when 
+				// a dialog has a large amount of content. In order to find the first and last 
+				// tabbable elements, instead of running the :tabbable selector against the 
+				// entirety of the dialog contents, test elements one at a time starting at 
+				// the beginning and then at the end.
+				var contents = this.uiDialog.find("*");				
+				
+				// Find the first and last tabbable elements
+				var first, last, i, el;
+				for (i = 0; i < contents.length; i++) {
+					el = $(contents[i]);
+					if (el.is(":tabbable")) {
+						first = el;
+						break;
+					}
+				}
+				for (i = contents.length; i >= 0; i--) {
+					el = $(contents[i]);
+					if (el.is(":tabbable")) {
+						last = el;
+						break;
+					}
+				}
 
 				if ( ( event.target === last[0] || event.target === this.uiDialog[0] ) && !event.shiftKey ) {
 					first.focus( 1 );
