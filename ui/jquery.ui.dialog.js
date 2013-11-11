@@ -336,7 +336,7 @@ $.widget( "ui.dialog", {
 						break;
 					}
 				}
-				for (i = contents.length; i >= 0; i--) {
+				for (i = contents.length - 1; i >= 0; i--) {
 					el = $(contents[i]);
 					if (el.is(":tabbable")) {
 						last = el;
